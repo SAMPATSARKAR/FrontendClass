@@ -174,6 +174,7 @@ console.log("Substring (0,5):",str2.substring(0,5));
 console.log("Slice (0,5):",str2.slice(0,5));
 console.log("Slice (3) till last:",str2.slice(3));
 console.log("Replace 'World' with 'JavaScript':",str2.replace('World','JavaScript'));
+console.log("Includes 'o':",str2.includes('o'));
 console.log("Includes 'Hello':",str2.includes('Hello'));
 console.log("Starts with 'Hello':",str2.startsWith('Hello'));
 console.log("Ends with 'World':",str2.endsWith('World'));
@@ -181,3 +182,9 @@ console.log("Split by space:",str2.split(' '));
 console.log("Trimmed string:",str2.trim());
 str5=str1+str2;
 console.log("Concatenated string:",str5);
+let grass = "cowcow";
+console.log(grass.replaceAll("c","h"));
+
+//charAt()
+let animal = "lion is king of jungle";
+console.log(animal.charAt(1));
