@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Comment System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .comment-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: Arial;
+            resize: vertical;
+            height: 80px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .btn-edit {
+            background: #28a745;
+        }
+
+        .btn-edit:hover {
+            background: #1e7e34;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+        }
+
+        .btn-like {
+            background: #ff9800;
+        }
+
+        .btn-like:hover {
+            background: #e68900;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .comment {
+            background: #f9f9f9;
+            border-left: 3px solid #007bff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .comment-text {
+            color: #333;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .comment-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .edit-form {
+            display: none;
+            margin-top: 10px;
+            gap: 10px;
+        }
+
+        .edit-form.show {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .edit-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .reply-section {
+            margin-left: 20px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .reply-input {
+            display: none;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .reply-input.show {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reply-input textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+        }
+
+        .reply {
+            background: #fff;
+            border-left: 2px solid #ff9800;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .reply-text {
+            margin-bottom: 5px;
+        }
+
+        .reply-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💬 Comments</h1>
+        
+        <div class="comment-input">
+            <textarea id="commentText" placeholder="Write a comment..."></textarea>
+            <button onclick="postComment()">Post</button>
+        </div>
+
+        <div id="commentsList"></div>
+    </div>
+
+    <script>
+        let comments = JSON.parse(localStorage.getItem('comments')) || [];
+        let commentId = parseInt(localStorage.getItem('commentId')) || 1;
+
+        function postComment() {
+            const text = document.getElementById('commentText').value.trim();
+            if (!text) {
+                alert('Write something!');
+                return;
+            }
+
+            comments.push({
+                id: commentId++,
+                text: text,
+                time: new Date(),
+                likes: 0,
+                replies: []
+            });
+
+            document.getElementById('commentText').value = '';
+            save();
+            render();
+        }
+
+        function deleteComment(id) {
+            if (confirm('Delete?')) {
+                comments = comments.filter(c => c.id !== id);
+                save();
+                render();
+            }
+        }
+
+        function editComment(id) {
+            const form = document.getElementById(`edit-${id}`);
+            form.classList.toggle('show');
+        }
+
+        function saveEdit(id) {
+            const text = document.getElementById(`edit-text-${id}`).value.trim();
+            if (!text) {
+                alert('Cannot be empty!');
+                return;
+            }
+            const comment = comments.find(c => c.id === id);
+            comment.text = text;
+            save();
+            render();
+        }
+
+        function likeComment(id) {
+            const comment = comments.find(c => c.id === id);
+            comment.likes++;
+            save();
+            render();
+        }
+
+        function toggleReplyInput(id) {
+            document.getElementById(`reply-input-${id}`).classList.toggle('show');
+        }
+
+        function postReply(commentId) {
+            const text = document.getElementById(`reply-text-${commentId}`).value.trim();
+            if (!text) {
+                alert('Write something!');
+                return;
+            }
+            const comment = comments.find(c => c.id === commentId);
+            comment.replies.push({
+                id: Date.now(),
+                text: text,
+                likes: 0
+            });
+            document.getElementById(`reply-text-${commentId}`).value = '';
+            save();
+            render();
+        }
+
+        function deleteReply(commentId, replyId) {
+            if (confirm('Delete?')) {
+                const comment = comments.find(c => c.id === commentId);
+                comment.replies = comment.replies.filter(r => r.id !== replyId);
+                save();
+                render();
+            }
+        }
+
+        function likeReply(commentId, replyId) {
+            const comment = comments.find(c => c.id === commentId);
+            const reply = comment.replies.find(r => r.id === replyId);
+            reply.likes++;
+            save();
+            render();
+        }
+
+        function formatTime(date) {
+            const d = new Date(date);
+            const now = new Date();
+            const diff = Math.floor((now - d) / 1000);
+            if (diff < 60) return 'just now';
+            if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+            return d.toLocaleDateString();
+        }
+
+        function save() {
+            localStorage.setItem('comments', JSON.stringify(comments));
+            localStorage.setItem('commentId', commentId);
+        }
+
+        function render() {
+            if (comments.length === 0) {
+                document.getElementById('commentsList').innerHTML = '<div class="empty">No comments yet!</div>';
+                return;
+            }
+
+            document.getElementById('commentsList').innerHTML = comments.map(c => `
+                <div class="comment">
+                    <div class="comment-text">${c.text}</div>
+                    <div class="comment-time">${formatTime(c.time)}</div>
+                    <div class="comment-actions">
+                        <button class="btn-small btn-like" onclick="likeComment(${c.id})">❤️ ${c.likes}</button>
+                        <button class="btn-small" onclick="toggleReplyInput(${c.id})">💬 Reply</button>
+                        <button class="btn-small btn-edit" onclick="editComment(${c.id})">✏️ Edit</button>
+                        <button class="btn-small btn-delete" onclick="deleteComment(${c.id})">🗑️ Delete</button>
+                    </div>
+
+                    <div id="edit-${c.id}" class="edit-form">
+                        <textarea id="edit-text-${c.id}">${c.text}</textarea>
+                        <div style="display: flex; gap: 5px;">
+                            <button onclick="saveEdit(${c.id})">Save</button>
+                            <button onclick="editComment(${c.id})" style="background: #999;">Cancel</button>
+                        </div>
+                    </div>
+
+                    <div id="reply-input-${c.id}" class="reply-input">
+                        <textarea id="reply-text-${c.id}" placeholder="Write a reply..." rows="2"></textarea>
+                        <div style="display: flex; gap: 5px;">
+                            <button onclick="postReply(${c.id})">Reply</button>
+                            <button onclick="toggleReplyInput(${c.id})" style="background: #999;">Cancel</button>
+                        </div>
+                    </div>
+
+                    ${c.replies.length > 0 ? `
+                        <div class="reply-section">
+                            ${c.replies.map(r => `
+                                <div class="reply">
+                                    <div class="reply-text">${r.text}</div>
+                                    <div class="reply-actions">
+                                        <button class="btn-small btn-like" onclick="likeReply(${c.id}, ${r.id})">❤️ ${r.likes}</button>
+                                        <button class="btn-small btn-delete" onclick="deleteReply(${c.id}, ${r.id})">🗑️ Delete</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        render();
+    </script>
+</body>
+</html>

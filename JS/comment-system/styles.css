@@ -1,0 +1,310 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.comment-input-section {
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    transition: border-color 0.3s;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+.btn-edit {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-edit:hover {
+    background: #45a049;
+}
+
+.btn-delete {
+    background: #f44336;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #da190b;
+}
+
+.btn-reply {
+    background: #2196F3;
+    color: white;
+}
+
+.btn-reply:hover {
+    background: #0b7dda;
+}
+
+.btn-like {
+    background: #ff9800;
+    color: white;
+}
+
+.btn-like.liked {
+    background: #e68900;
+}
+
+.btn-cancel {
+    background: #999;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background: #777;
+}
+
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.comment {
+    background: #f9f9f9;
+    border-left: 4px solid #667eea;
+    padding: 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.comment:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: #333;
+}
+
+.comment-time {
+    font-size: 12px;
+    color: #999;
+}
+
+.comment-text {
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.like-count {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    color: #ff9800;
+}
+
+.edit-section {
+    display: none;
+    margin-top: 10px;
+}
+
+.edit-section.show {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.edit-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.replies {
+    margin-top: 15px;
+    padding-left: 20px;
+    border-left: 2px solid #e0e0e0;
+}
+
+.reply {
+    background: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    border-left: 3px solid #2196F3;
+}
+
+.reply-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.reply-author {
+    font-weight: 600;
+    color: #2196F3;
+    font-size: 14px;
+}
+
+.reply-time {
+    font-size: 11px;
+    color: #999;
+}
+
+.reply-text {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 5px;
+    word-wrap: break-word;
+}
+
+.reply-actions {
+    display: flex;
+    gap: 5px;
+    font-size: 12px;
+}
+
+.reply-edit-section {
+    display: none;
+    margin-top: 8px;
+}
+
+.reply-edit-section.show {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.reply-textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 13px;
+    resize: vertical;
+}
+
+.reply-edit-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.reply-input-section {
+    display: none;
+    margin-top: 10px;
+}
+
+.reply-input-section.show {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.reply-textarea-input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.reply-input-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+.empty-state p {
+    font-size: 16px;
+}

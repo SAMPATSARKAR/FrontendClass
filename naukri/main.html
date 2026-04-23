@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naukri Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            background: white;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ff7555;
+        }
+
+        .menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .search input {
+            padding: 8px 12px;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: whitesmoke;
+            height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .sidebar img {
+            width: 120px;
+            border-radius: 50%;
+        }
+
+        .center {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .job {
+            background: #f4f4f4;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <div class="logo">naukri</div>
+
+        <div class="menu">
+            <div>Prepare</div>
+            <div>Participate</div>
+            <div>Opportunities</div>
+        </div>
+
+        <div class="search">
+            <input type="text" id="search" placeholder="Search jobs">
+        </div>
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="sidebar">
+
+            <img src="Untitled.png">
+
+            <h3 id="username"></h3>
+
+            <button onclick="toggleSidebar()">Hide Sidebar</button>
+
+        </div>
+        <div class="center">
+            <h2>Recommended Jobs</h2>
+            <div id="jobs"></div>
+        </div>
+
+    </div>
+
+    <script src="main.js"></script>
+
+
+</body>
+
+</html>
